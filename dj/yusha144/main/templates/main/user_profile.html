@@ -1,0 +1,20 @@
+<!-- main/templates/main/user_profile.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+</head>
+<body>
+<h1>Личный кабинет</h1>
+<img src="{{ profile_picture }}" alt="Profile Picture" width="150" height="150">
+<p>Имя пользователя: {{ username }}</p>
+<p>Имя: {{ first_name }}</p>
+<p>Фамилия: {{ last_name }}</p>
+<p>Email: {{ email }}</p>
+<p>Дата регистрации: {{ date_joined }}</p>
+<p>Группа: {{ group }}</p>
+</body>
+</html>

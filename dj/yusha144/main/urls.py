@@ -1,8 +1,11 @@
-from django.urls import path, include
+from django.contrib import admin
+# main\urls.py
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='home'),  # при заходе на главную страницу выводим функцию index из views
-    path('login/', views.login_view, name='login'),  # при заходе на страницу login выводим функцию login из views
-    path('register/', views.register, name='register')
+    path('', views.home, name='home'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('profile/', views.user_profile, name='user_profile'),
 ]

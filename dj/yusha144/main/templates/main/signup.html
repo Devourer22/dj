@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -39,31 +39,31 @@
 <div class="register-container">
     <div class="register-form">
         <h2 class="mb-4">Регистрация</h2>
-        <form method="post" action="{% url 'register' %}">
+        <form method="post" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="username">Имя пользователя:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <label>Имя пользователя:</label>
+                {{form.username}}
             </div>
             <div class="form-group">
-                <label for="first_name">Имя:</label>
-                <input type="text" class="form-control" id="first_name" name="first_name" required>
+                <label>Имя:</label>
+                {{form.first_name}}
             </div>
             <div class="form-group">
-                <label for="last_name">Фамилия:</label>
-                <input type="text" class="form-control" id="last_name" name="last_name" required>
+                <label>Фамилия:</label>
+                {{form.last_name}}
             </div>
             <div class="form-group">
-                <label for="group">Группа:</label>
-                <input type="text" class="form-control" id="group" name="group" required>
+                <label>Группа:</label>
+                {{form.group}}
             </div>
             <div class="form-group">
-                <label for="password1">Пароль:</label>
-                <input type="password" class="form-control" id="password1" name="password1" required>
+                <label>Пароль:</label>
+                {{form.password1}}
             </div>
             <div class="form-group">
-                <label for="password2">Подтвердите пароль:</label>
-                <input type="password" class="form-control" id="password2" name="password2" required>
+                <label>Подтвердите пароль:</label>
+                {{form.password2}}
             </div>
             <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
         </form>

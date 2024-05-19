@@ -1,13 +1,47 @@
+# forms.py
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
+from django.forms import TextInput, Select, PasswordInput
 
 
-class RegisterForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=True, help_text='Введите ваше имя')
-    last_name = forms.CharField(max_length=30, required=True, help_text='Введите вашу фамилию')
-    group = forms.CharField(max_length=30, required=True, help_text='Введите вашу группу')
+class UserRegistrationForm(UserCreationForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'group', 'password1', 'password2')
+        fields = ['username', 'first_name', 'last_name', 'group', 'password1', 'password2']
+        widgets = {
+            'username': TextInput(attrs={
+                'class': 'form-control',
+                'id': 'username',
+                'name': 'username'
+            }),
+            'first_name': TextInput(attrs={
+                'class': 'form-control',
+                'id': 'first_name',
+                'name': 'first_name'
+            }),
+            'last_name': TextInput(attrs={
+                'class': 'form-control',
+                'id': 'last_name',
+                'name': 'last_name'
+            }),
+            'group': Select(attrs={
+                'class': 'form-control',
+                'id': 'group',
+                'name': 'group'
+            }),
+            'password1': PasswordInput(attrs={
+                'class': 'form-control',
+                'id': 'password1',
+                'name': 'password1'
+            }),
+            'password2': PasswordInput(attrs={
+                'class': 'form-control',
+                'id': 'password2',
+                'name': 'password2'
+            }),
+        }

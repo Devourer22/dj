@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -41,6 +41,7 @@
         <h2 class="mb-4">Авторизация</h2>
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
+            {{ form.as_p }}
             <div class="form-group">
                 <label for="username">ID:</label>
                 <input type="text" class="form-control" id="username" name="username" required>
