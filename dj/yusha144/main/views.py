@@ -1,9 +1,9 @@
 # views.py
+from .forms import UserRegistrationForm, CustomAuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import UserRegistrationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def home(request):
@@ -22,6 +22,9 @@ def signup(request):
             if user is not None:
                 login(request, user)
                 return redirect('home')
+        else:
+            # Обработка случая, если форма не валидна
+            return render(request, 'main/signup.html', {'form': form})
     else:
         form = UserRegistrationForm()
     return render(request, 'main/signup.html', {'form': form})
@@ -29,13 +32,20 @@ def signup(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, "Invalid username or password. Please try again.")
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
     else:
-        form = AuthenticationForm()
+        form = CustomAuthenticationForm()
     return render(request, 'main/login.html', {'form': form})
 
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load form_tags %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -24,10 +25,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .login-form {
-            width: 50%;
+            width: 100%;
+            max-width: 500px;
         }
         .login-image {
             width: 40%;
+            margin-left: 20px;
         }
         .login-image img {
             max-width: 100%;
@@ -39,20 +42,34 @@
 <div class="login-container">
     <div class="login-form">
         <h2 class="mb-4">Авторизация</h2>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger mb-3">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <div class="form-group">
-                <label for="username">ID:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+            <div class="form-group mb-3">
+                <label for="id_username">ID:</label>
+                {{ form.username|add_class:"form-control" }}
+                {% for error in form.username.errors %}
+                <div class="alert alert-danger mt-2">
+                    {{ error }}
+                </div>
+                {% endfor %}
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+            <div class="form-group mb-3">
+                <label for="id_password">Password:</label>
+                {{ form.password|add_class:"form-control" }}
+                {% for error in form.password.errors %}
+                <div class="alert alert-danger mt-2">
+                    {{ error }}
+                </div>
+                {% endfor %}
             </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                <label class="form-check-label" for="remember">Remember me</label>
+            <div class="form-group form-check mb-3">
+                {{ form.remember_me|add_class:"form-check-input" }}
+                <label class="form-check-label" for="id_remember_me">Remember me</label>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Войти</button>
             <a href="#" class="btn btn-link">Forgot password?</a>
@@ -62,7 +79,7 @@
             </div>
         </form>
     </div>
-    <div class="login-image">
+    <div class="login-image d-none d-md-block">
         <img src="{% static 'main/XXXL.png' %}" alt="Login Image">
     </div>
 </div>
