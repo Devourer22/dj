@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
+from .models import UserProfile
+
 
 def home(request):
     return render(request, 'main/home.html')
@@ -15,13 +17,14 @@ def signup(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            UserProfile.objects.create(user=user)
             group = form.cleaned_data.get('group')
             user.groups.add(group)
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('user_profile')
         else:
             # Обработка случая, если форма не валидна
             return render(request, 'main/signup.html', {'form': form})
@@ -39,7 +42,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('user_profile')
             else:
                 messages.error(request, "Invalid username or password. Please try again.")
         else:
@@ -52,6 +55,8 @@ def login_view(request):
 @login_required
 def user_profile(request):
     user = request.user
+    if not hasattr(user, 'userprofile'):
+        UserProfile.objects.create(user=user)
     profile = user.userprofile
     context = {
         'username': user.username,
