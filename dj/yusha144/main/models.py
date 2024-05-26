@@ -52,3 +52,34 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+# main/models.py
+from django.db import models
+from django.contrib.auth.models import User
+
+
+class Course(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses')
+
+    def __str__(self):
+        return self.title
+
+
+class Section(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='sections')
+    title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
+
+class Chapter(models.Model):
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='chapters')
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title

@@ -9,7 +9,7 @@ class UserRegistrationForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True)
-    
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'group', 'password1', 'password2']
@@ -59,3 +59,26 @@ class CustomAuthenticationForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-control', 'id': 'id_username'})
         self.fields['password'].widget.attrs.update({'class': 'form-control', 'id': 'id_password'})
+
+
+# main/forms.py
+from django import forms
+from .models import Course, Section, Chapter
+
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['title', 'description']
+
+
+class SectionForm(forms.ModelForm):
+    class Meta:
+        model = Section
+        fields = ['title']
+
+
+class ChapterForm(forms.ModelForm):
+    class Meta:
+        model = Chapter
+        fields = ['title', 'content']

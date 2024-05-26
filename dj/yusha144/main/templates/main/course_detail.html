@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<h2>{{ course.title }}</h2>
+<p>{{ course.description }}</p>
+<h3>Разделы</h3>
+<ul>
+    {% for section in sections %}
+    <li><a href="{% url 'section_detail' section.id %}">{{ section.title }}</a></li>
+    {% endfor %}
+</ul>
+{% if is_teacher %}
+<a href="{% url 'create_section' course.id %}">Добавить раздел</a>
+{% endif %}
+{% endblock %}

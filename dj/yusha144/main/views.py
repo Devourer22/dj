@@ -68,3 +68,84 @@ def user_profile(request):
         'profile_picture': profile.profile_picture.url,
     }
     return render(request, 'main/user_profile.html', context)
+
+
+# main/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Course, Section, Chapter
+from .forms import CourseForm, SectionForm, ChapterForm
+from django.contrib.auth.models import Group
+
+
+@login_required
+def create_course(request):
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
+    if not is_teacher:
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            course = form.save(commit=False)
+            course.created_by = request.user
+            course.save()
+            return redirect('course_detail', course_id=course.id)
+    else:
+        form = CourseForm()
+    return render(request, 'main/create_course.html', {'form': form, 'is_teacher': is_teacher})
+
+
+@login_required
+def create_section(request, course_id):
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
+    if not is_teacher:
+        return redirect('home')
+
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == 'POST':
+        form = SectionForm(request.POST)
+        if form.is_valid():
+            section = form.save(commit=False)
+            section.course = course
+            section.save()
+            return redirect('course_detail', course_id=course.id)
+    else:
+        form = SectionForm()
+    return render(request, 'main/create_section.html', {'form': form, 'course': course, 'is_teacher': is_teacher})
+
+
+@login_required
+def create_chapter(request, section_id):
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
+    if not is_teacher:
+        return redirect('home')
+
+    section = get_object_or_404(Section, id=section_id)
+    if request.method == 'POST':
+        form = ChapterForm(request.POST)
+        if form.is_valid():
+            chapter = form.save(commit=False)
+            chapter.section = section
+            chapter.save()
+            return redirect('course_detail', course_id=section.course.id)
+    else:
+        form = ChapterForm()
+    return render(request, 'main/create_chapter.html', {'form': form, 'section': section, 'is_teacher': is_teacher})
+
+
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    sections = course.sections.all()
+    return render(request, 'main/course_detail.html', {'course': course, 'sections': sections})
+
+
+def section_detail(request, section_id):
+    section = get_object_or_404(Section, id=section_id)
+    chapters = section.chapters.all()
+    return render(request, 'main/section_detail.html', {'section': section, 'chapters': chapters})
+
+
+def chapter_detail(request, chapter_id):
+    chapter = get_object_or_404(Chapter, id=chapter_id)
+    return render(request, 'main/chapter_detail.html', {'chapter': chapter})
