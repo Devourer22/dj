@@ -114,3 +114,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Использование базы данных для хранения сессий
+SESSION_COOKIE_NAME = 'sessionid'  # Название куки для хранения сессии
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Закрытие сессии при закрытии браузера
+
+LOGOUT_REDIRECT_URL = 'login'
