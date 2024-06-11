@@ -33,22 +33,34 @@ def signup(request):
     return render(request, 'main/signup.html', {'form': form})
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from .forms import CustomAuthenticationForm
+
+
 def login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+            remember_me = form.cleaned_data.get('remember_me')
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('user_profile')
+                if remember_me:
+                    request.session.set_expiry(1209600)  # 2 недели
+                else:
+                    request.session.set_expiry(0)  # Закрытие браузера
+                return redirect('home')  # Замените 'home' на имя вашей главной страницы
             else:
-                messages.error(request, "Invalid username or password. Please try again.")
+                messages.error(request, 'Неверный ID или пароль.')
         else:
-            messages.error(request, "Invalid username or password. Please try again.")
+            messages.error(request, 'Неверный ID или пароль.')
     else:
         form = CustomAuthenticationForm()
+
     return render(request, 'main/login.html', {'form': form})
 
 
