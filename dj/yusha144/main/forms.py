@@ -67,18 +67,56 @@ from .models import Course, Section, Chapter
 
 
 class CourseForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Название курса',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'width: 75%;'
+        })
+    )
+    description = forms.CharField(
+        label='Описание курса',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'width:75%; '
+        })
+    )
+
     class Meta:
         model = Course
         fields = ['title', 'description']
 
 
 class SectionForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Название раздела',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'width: 75%;'
+        })
+    )
+
     class Meta:
         model = Section
         fields = ['title']
 
 
 class ChapterForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Название главы',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'width: 75%;'
+        })
+    )
+    content = forms.CharField(
+        label='Содержимое',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'style': 'width: 75%; height: 200px;'
+        })
+    )
+
     class Meta:
         model = Chapter
         fields = ['title', 'content']

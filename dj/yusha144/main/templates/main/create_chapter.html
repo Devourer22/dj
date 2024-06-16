@@ -1,9 +1,9 @@
 {% extends 'main/base.html' %}
 {% block content %}
-<h2>Создать главу для раздела {{ section.title }}</h2>
+<h2>Создание главы раздела "{{ section.title }}"</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Создать</button>
+    <button type="submit" class="btn btn-primary">Создать</button>
 </form>
 {% endblock %}

@@ -91,10 +91,6 @@ from django.contrib.auth.models import Group
 
 @login_required
 def create_course(request):
-    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
-    if not is_teacher:
-        return redirect('home')
-
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
@@ -104,15 +100,11 @@ def create_course(request):
             return redirect('course_detail', course_id=course.id)
     else:
         form = CourseForm()
-    return render(request, 'main/create_course.html', {'form': form, 'is_teacher': is_teacher})
+    return render(request, 'main/create_course.html', {'form': form})
 
 
 @login_required
 def create_section(request, course_id):
-    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
-    if not is_teacher:
-        return redirect('home')
-
     course = get_object_or_404(Course, id=course_id)
     if request.method == 'POST':
         form = SectionForm(request.POST)
@@ -123,15 +115,11 @@ def create_section(request, course_id):
             return redirect('course_detail', course_id=course.id)
     else:
         form = SectionForm()
-    return render(request, 'main/create_section.html', {'form': form, 'course': course, 'is_teacher': is_teacher})
+    return render(request, 'main/create_section.html', {'form': form, 'course': course})
 
 
 @login_required
 def create_chapter(request, section_id):
-    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
-    if not is_teacher:
-        return redirect('home')
-
     section = get_object_or_404(Section, id=section_id)
     if request.method == 'POST':
         form = ChapterForm(request.POST)
@@ -142,26 +130,32 @@ def create_chapter(request, section_id):
             return redirect('course_detail', course_id=section.course.id)
     else:
         form = ChapterForm()
-    return render(request, 'main/create_chapter.html', {'form': form, 'section': section, 'is_teacher': is_teacher})
+    return render(request, 'main/create_chapter.html', {'form': form, 'section': section})
 
 
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
     sections = course.sections.all()
-    return render(request, 'main/course_detail.html', {'course': course, 'sections': sections})
+    return render(request, 'main/course_detail.html',
+                  {'course': course, 'sections': sections, 'is_teacher': is_teacher})
 
 
 def section_detail(request, section_id):
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
     section = get_object_or_404(Section, id=section_id)
     chapters = section.chapters.all()
-    return render(request, 'main/section_detail.html', {'section': section, 'chapters': chapters})
+    return render(request, 'main/section_detail.html',
+                  {'section': section, 'chapters': chapters, 'is_teacher': is_teacher})
 
 
 def chapter_detail(request, chapter_id):
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
     chapter = get_object_or_404(Chapter, id=chapter_id)
-    return render(request, 'main/chapter_detail.html', {'chapter': chapter})
+    return render(request, 'main/chapter_detail.html', {'chapter': chapter, 'is_teacher': is_teacher})
 
 
 def courses_list(request):
+    is_teacher = request.user.groups.filter(name='Преподаватели').exists()
     courses = Course.objects.all()
-    return render(request, 'main/courses_list.html', {'courses': courses})
+    return render(request, 'main/courses_list.html', {'courses': courses, 'is_teacher': is_teacher})
