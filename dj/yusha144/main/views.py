@@ -82,7 +82,6 @@ def user_profile(request):
     return render(request, 'main/user_profile.html', context)
 
 
-# main/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Course, Section, Chapter
@@ -161,3 +160,8 @@ def section_detail(request, section_id):
 def chapter_detail(request, chapter_id):
     chapter = get_object_or_404(Chapter, id=chapter_id)
     return render(request, 'main/chapter_detail.html', {'chapter': chapter})
+
+
+def courses_list(request):
+    courses = Course.objects.all()
+    return render(request, 'main/courses_list.html', {'courses': courses})
