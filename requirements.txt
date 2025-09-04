@@ -1,0 +1,41 @@
+# Django Framework
+Django>=4.0.0,<5.0.0
+
+# Database
+psycopg2-binary>=2.9.0  # PostgreSQL adapter (для продакшена)
+# SQLite встроен в Python
+
+# Static files and media
+Pillow>=9.0.0  # Image processing
+whitenoise>=6.0.0  # Static files serving
+
+# Development tools
+django-debug-toolbar>=3.7.0  # Debug toolbar
+django-extensions>=3.2.0  # Additional management commands
+
+# Security
+django-cors-headers>=3.13.0  # CORS headers
+django-ratelimit>=3.0.0  # Rate limiting
+
+# Forms and validation
+django-crispy-forms>=1.14.0  # Better form rendering
+crispy-bootstrap5>=0.7  # Bootstrap 5 integration
+
+# Environment variables
+python-decouple>=3.6  # Environment configuration
+
+# Testing
+coverage>=6.4.0  # Test coverage
+factory-boy>=3.2.0  # Test data factories
+
+# Production server
+gunicorn>=20.1.0  # WSGI server
+
+# Code quality
+flake8>=5.0.0  # Code linting
+black>=22.0.0  # Code formatting
+isort>=5.10.0  # Import sorting
+
+# Documentation
+sphinx>=5.0.0  # Documentation generation
+sphinx-rtd-theme>=1.0.0  # Read the Docs theme
